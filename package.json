@@ -1,0 +1,39 @@
+{
+  "name": "socialnetwork",
+  "version": "1.0.0",
+  "description": "creation of a Rest Api server... ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
+    "start": "npm run build && nodemon dist/server/server.js",
+    "watch": "nodemon"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/durandpaul/MySocialNetwork.git"
+  },
+  "keywords": [
+    "Node",
+    "js",
+    "API",
+    "REST"
+  ],
+  "author": "Paul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/durandpaul/MySocialNetwork/issues"
+  },
+  "homepage": "https://github.com/durandpaul/MySocialNetwork#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.5.14",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "rimraf": "^2.6.3"
+  }
+}

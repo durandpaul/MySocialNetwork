@@ -1,0 +1,26 @@
+{
+  "name": "socialnetwork",
+  "version": "1.0.0",
+  "description": "creation of a Rest Api server... ",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/durandpaul/MySocialNetwork.git"
+  },
+  "keywords": [
+    "Node",
+    "js",
+    "API",
+    "REST"
+  ],
+  "author": "Paul",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/durandpaul/MySocialNetwork/issues"
+  },
+  "homepage": "https://github.com/durandpaul/MySocialNetwork#readme"
+}

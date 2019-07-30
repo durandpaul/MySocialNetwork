@@ -33,6 +33,14 @@ var UserSchema = new mongoose.Schema({
     inscription_date: {
         type: Date,
         default: Date.now()
+    },
+    gender : {
+        type: String,
+        default: 'male'
+    },
+    avatar: {
+        type: String,
+        default: "https://avataaars.io/?avatarStyle=Transparent&topType=ShortHairShortCurly&accessoriesType=Prescription02&hairColor=Black&facialHairType=Blank&clotheType=Hoodie&clotheColor=White&eyeType=Default&eyebrowType=DefaultNatural&mouthType=Default&skinColor=Light"
     }
 });
 

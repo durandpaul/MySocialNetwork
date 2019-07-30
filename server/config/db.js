@@ -2,11 +2,7 @@
 
 export default {
     // 'secret': 'biodontjedi',
-    'database': 'mongodb://127.0.0.1:27017/db-social'
+    'database': 'mongodb+srv://Jeanuser:<FckMdp12>@cluster0-8heyp.mongodb.net/test?retryWrites=true&w=majority'
 };
 
-
-// module.exports = {
-//     'secret': 'restapisecret',
-//     'database': 'mongodb://127.0.0.1:27017/restAPI'
-//   };
+// mongodb://127.0.0.1:27017/db-social

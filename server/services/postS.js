@@ -6,10 +6,14 @@ import {
 
 
 const getPosts = async (req, res, next) => {
+    // console.log("getPosts req", req);
+
 
     try {
         let userId = req.params.id
-        let posts = await Post.find({userid: userId});
+        let posts = await Post.find({
+            userId: userId
+        });
 
         if (posts.length > 0) {
             return res.status(200).json({
@@ -61,13 +65,13 @@ const createPost = async (req, res, next) => {
 
     try {
         const {
-            userid,
+            userId,
             username,
-            title,
-            body
+            message,
+            image
         } = req.body
 
-        if (userid === undefined || userid === '') {
+        if (userId === undefined || userId === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
                 'description': 'user id is required',
@@ -83,19 +87,19 @@ const createPost = async (req, res, next) => {
             });
         }
 
-        if (body === undefined || body === '') {
+        if (message === undefined || message === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
-                'description': 'body is required',
-                'field': 'body'
+                'description': 'message is required',
+                'field': 'message'
             });
         }
 
         const postData = {
-            userid,
+            userId,
             username,
-            title,
-            body
+            message,
+            image
         }
 
         let newPost = await Post.create(postData);
@@ -120,33 +124,30 @@ const createPost = async (req, res, next) => {
 
 const updatePost = async (req, res, next) => {
     try {
-        const postId = req.params.id;
 
         const {
-            title,
-            body
+            postId,
+            message
         } = req.body
 
-        
-        if (title === undefined || title === '') {
+        if (message === undefined || message === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
-                'description': 'title is required',
-                'field': 'title'
+                'description': 'message is required',
+                'field': 'message'
             });
         }
 
-        if (body === undefined || body === '') {
+        if (postId === undefined || postId === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
-                'description': 'body is required',
-                'field': 'body'
+                'description': 'postId is required',
+                'field': 'postId'
             });
         }
 
         let postchange = {
-            title,
-            body
+            message
         };
 
         let postToUpdate = await Post.findByIdAndUpdate(postId, postchange, {
@@ -164,7 +165,7 @@ const updatePost = async (req, res, next) => {
 
     } catch (err) {
         console.log(err);
-        
+
         return res.status(500).json({
             'code': 'SERVER_ERROR',
             'description': 'something went wrong, Please try again'
@@ -174,36 +175,36 @@ const updatePost = async (req, res, next) => {
 }
 
 const deletePost = async (req, res, next) => {
-        try {
-            const postId = req.params.id;
+    try {
+        const postId = req.params.id;
 
-            if (postId === undefined || postId === '') {
-                return res.status(422).json({
-                    'code': 'REQUIRED_FIELD_MISSING',
-                    'description': 'postId is required',
-                    'field': 'postId'
-                });
-            }
-
-            let postToDelete = await Post.findByIdAndDelete(postId);
-
-            if (postToDelete) {
-                return res.status(204).json({
-                    'message': `friend with id ${postId} deleted successfully`
-                });
-            } 
-    
-            return res.status(404).json({
-                'code': 'BAD_REQUEST_ERROR',
-                'description': 'No post found in the system'
-            });
-
-        } catch (err) {
-            return res.status(500).json({
-                'code': 'SERVER_ERROR',
-                'description': 'something went wrong, Please try again'
+        if (postId === undefined || postId === '') {
+            return res.status(422).json({
+                'code': 'REQUIRED_FIELD_MISSING',
+                'description': 'postId is required',
+                'field': 'postId'
             });
         }
+
+        let postToDelete = await Post.findByIdAndDelete(postId);
+
+        if (postToDelete) {
+            return res.status(204).json({
+                'message': `friend with id ${postId} deleted successfully`
+            });
+        }
+
+        return res.status(404).json({
+            'code': 'BAD_REQUEST_ERROR',
+            'description': 'No post found in the system'
+        });
+
+    } catch (err) {
+        return res.status(500).json({
+            'code': 'SERVER_ERROR',
+            'description': 'something went wrong, Please try again'
+        });
+    }
 }
 
 export {

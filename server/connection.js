@@ -8,11 +8,8 @@ import * as confDb from './config/db';
 
 //Set up default mongoose connection
 
-// var mongoDB = 'mongodb+srv://paul:p@ul92@cluster0-ad5t2.gcp.mongodb.net/multidb?retryWrites=true';
 
 // Création connection DB avec Mongoose
-
-// console.log(confDb.default.database);
 
 mongoose.connect(confDb.default.database, {
   useNewUrlParser: true,

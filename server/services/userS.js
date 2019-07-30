@@ -1,12 +1,13 @@
 'use strict';
 
+var cookieSession = require('cookie-session');
+
 import {
     User
 } from '../models/userM';
 
 
 const signUp = async (req, res, next) => {
-
     try {
         const {
             firstname,
@@ -14,7 +15,7 @@ const signUp = async (req, res, next) => {
             username,
             password,
             email,
-            // birthday,
+            birthday,
         } = req.body;
 
         if (firstname === undefined || firstname === '') {
@@ -49,14 +50,6 @@ const signUp = async (req, res, next) => {
             });
         }
 
-        // if (birthday === undefined || birthday === '') {
-        //     return res.status(422).json({
-        //         'code': 'REQUIRED_FIELD_MISSING',
-        //         'description': 'birthday is required',
-        //         'field': 'birthday'
-        //     });
-        // }
-
         if (email === undefined || email === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
@@ -83,7 +76,7 @@ const signUp = async (req, res, next) => {
             username,
             password,
             email,
-            // birthday,
+            birthday,
         }
 
         let newUser = await User.create(userInfo);
@@ -91,7 +84,7 @@ const signUp = async (req, res, next) => {
         if (newUser) {
             return res.status(201).json({
                 'message': 'user created successfully',
-                'data': newUser
+                'newuser': newUser
             });
         } else {
             throw new Error('something went worng');
@@ -106,6 +99,110 @@ const signUp = async (req, res, next) => {
 
 }
 
+const signIn = async (req, res, next) => {
+    try {
+
+        const {
+            username,
+            password,
+        } = req.body;
+
+        if (username === undefined || username === '') {
+            return res.status(422).json({
+                'code': 'REQUIRED_FIELD_MISSING',
+                'description': 'username is required',
+                'field': 'username'
+            });
+        }
+
+        if (password === undefined || password === '') {
+            return res.status(422).json({
+                'code': 'REQUIRED_FIELD_MISSING',
+                'description': 'password is required',
+                'field': 'password'
+            });
+        }
+
+        let user = await User.findOneAndUpdate({
+            'username': username,
+            'password': password
+        }, {
+            $set: {
+                status: true
+            }
+        });
+        
+        if (!user) {
+            return res.status(500).json({
+                'message': `user with username ${username} or  password not found`,
+            });
+        } else {
+            
+            req.sessionCookies.username = username;
+            req.sessionCookies.userid = user.id;
+            req.sessionCookies.userStatus = user.status;
+
+            // console.log(" login after req.sessionCookies", req.sessionCookies );
+
+            let userConnect = {
+                username: user.username,
+                status: user.status,
+                _id: user._id
+            }
+            
+            return res.status(200).json({
+                'message': `user with username ${username} find successfully`,
+                'user': userConnect, 
+            });
+
+        }
+
+    } catch (err) {
+        return res.status(500).json({
+            'code': 'SERVER_ERROR',
+            'description': 'something went wrong, Please try again'
+        });
+    }
+}
+
+const signOut = async (req, res, next) => {
+    try {
+        const id = req.body.id;
+
+        if (id === undefined || id === '') {
+            return res.status(500).json({
+                'code': 'REQUIRED_FIELD_MISSING',
+                'description': 'id is required',
+                'field': 'id'
+            });
+        }
+
+        let userId = await User.findByIdAndUpdate(id, {
+            $set: {
+                status: false
+            }
+        });
+            console.log('deco userId', userId);
+            
+        if (!userId) {
+            return res.status(500).json({
+                'message': `user with username ${userId._id} not found`
+            });
+        } else {
+            req.session = null;
+            return res.status(200).json({
+                'message': `user with id ${userId._id} logout`,
+                'id': userId._id
+            });
+        }
+
+    } catch (err) {
+        return res.status(500).json({
+            'code': 'SERVER_ERROR',
+            'description': 'something went wrong, Please try again'
+        });
+    }
+}
 
 const getUsers = async (req, res, next) => {
     try {
@@ -123,7 +220,7 @@ const getUsers = async (req, res, next) => {
             'code': 'BAD_REQUEST_ERROR',
             'description': 'No users found in the system'
         });
-    } catch (error) {
+    } catch (err) {
         return res.status(500).json({
             'code': 'SERVER_ERROR',
             'description': 'something went wrong, Please try again'
@@ -148,7 +245,6 @@ const getUserById = async (req, res, next) => {
         });
 
     } catch (err) {
-        console.log(err);
         return res.status(500).json({
             'code': 'SERVER_ERROR',
             'description': 'something went wrong, Please try again'
@@ -175,7 +271,7 @@ const updateUser = async (req, res, next) => {
             });
         }
 
-        
+
         if (lastname === undefined || lastname === '') {
             return res.status(422).json({
                 'code': 'REQUIRED_FIELD_MISSING',
@@ -220,7 +316,7 @@ const updateUser = async (req, res, next) => {
         } else {
             throw new Error('something went wrong');
         }
-    } catch (error) {
+    } catch (err) {
 
         return res.status(500).json({
             'code': 'SERVER_ERROR',
@@ -233,7 +329,7 @@ const deleteUser = async (req, res, next) => {
     try {
         let userId = req.params.id;
         let user = await User.findByIdAndRemove(userId);
-        
+
         if (user) {
             return res.status(204).json({
                 'message': `user with id ${req.params.id} deleted successfully`
@@ -245,7 +341,7 @@ const deleteUser = async (req, res, next) => {
             'description': 'No users found in the system'
         });
 
-    } catch (error) {
+    } catch (err) {
 
         return res.status(500).json({
             'code': 'SERVER_ERROR',
@@ -254,8 +350,22 @@ const deleteUser = async (req, res, next) => {
     }
 }
 
+// const getConnection = async (req, res) => {
+
+//     if(req.params.id) {
+
+//         return res.status(200).json({
+//             'message': `user with id ${req.params.id} already connect`,
+//             'connection': req.
+//         });
+//     }
+
+// }
+
 export {
     signUp,
+    signIn,
+    signOut,
     getUsers,
     getUserById,
     updateUser,

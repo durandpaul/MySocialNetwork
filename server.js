@@ -6,9 +6,9 @@ const cors = require('cors') ;
 const http = require('http').Server(app);
 const bodyParser = require('body-parser');
 
-import { cookiesConfig } from './config/cookies';
-import { connectionDb } from './connection';
-import { localConfig } from './config/local';
+import { cookiesConfig } from './server/config/cookies';
+import { connectionDb } from './server/connection';
+import { localConfig } from './server/config/local';
 
 const port = process.env.PORT || localConfig.port;
 
@@ -27,7 +27,7 @@ app.get('/*', (req, res) => {
   res.sendFile(path.join(__dirname + '/dist/index.html'));
 });
 
-const api = require('./routes/index');
+const api = require('./server/routes/index');
 
 app.use('/server', api);
 

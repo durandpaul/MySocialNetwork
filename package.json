@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "creation of a Rest Api server... ",
   "main": "server.js",
+  "engines": {
+    "node": "10.15.3"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "start": "npm run build && nodemon dist/server/server.js",
-    "watch": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",

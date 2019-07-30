@@ -13,7 +13,6 @@ import * as confDb from './config/db';
 
 mongoose.connect(confDb.default.database, {
   useNewUrlParser: true,
-  useFindAndModify: false
 });
 
 //Get the default connection

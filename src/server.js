@@ -1,6 +1,7 @@
 'use strict';
 import "@babel/polyfill";
 import "@babel/core";
+import path from 'path'
 
 const cookieSession = require('cookie-session');
 const express = require('express');

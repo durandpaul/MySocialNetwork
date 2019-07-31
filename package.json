@@ -35,13 +35,12 @@
     "express": "^4.17.1",
     "mongoose": "^5.5.14",
     "morgan": "^1.9.1",
-    "cors": "^2.8.5"
-
-  },
-  "devDependencies": {
+    "cors": "^2.8.5",
     "@babel/core": "^7.5.5",
     "@babel/cli": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/node": "^7.5.5"
+  },
+  "devDependencies": {
   }
 }

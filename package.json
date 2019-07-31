@@ -9,10 +9,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -rf build && mkdir build",
-    "build-babel": "babel -d ./build ./src -s",
-    "build": "npm run clean && npm run build-babel",
-    "start": "npm run build && node ./build/server.js"
+    "build": "babel src --out-dir dist",
+    "start": "babel-node src/server.js",
+    "serve": "nodemon dist/server.js"
   },
   "repository": {
     "type": "git",
@@ -31,7 +30,6 @@
   },
   "homepage": "https://github.com/durandpaul/MySocialNetwork#readme",
   "dependencies": {
-    "@babel/polyfill": "^7.4.4",
     "body-parser": "^1.19.0",
     "cookie-session": "^1.3.3",
     "express": "^4.17.1",

@@ -15,13 +15,14 @@ import { localConfig } from './config/local';
 
 const port = process.env.PORT || localConfig.port;
 
+app.set('trust proxy', 1); // trust first proxy
+// console.log(cookiesConfig);
+app.use(cookieSession(cookiesConfig));
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.set('trust proxy', 1); // trust first proxy
-// console.log(cookiesConfig);
-app.use(cookieSession(cookiesConfig));
 
 
 // app.use(express.static(__dirname +  '/dist'));
